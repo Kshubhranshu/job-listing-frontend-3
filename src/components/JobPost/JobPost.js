@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { DEFAULT_SKILLS } from "../../utils/constant";
 import { createJobPost, updateJobPostById } from "../../apis/job";
 import styles from "./JobPost.module.css";
@@ -8,7 +8,6 @@ export default function JobPost() {
     const { state } = useLocation();
     const navigate = useNavigate();
     const [stateData] = useState(state?.jobDetails);
-    console.log(stateData);
     const [formData, setFormData] = useState({
         companyName: "" || stateData?.companyName,
         logoUrl: "" || stateData?.logoUrl,
@@ -66,7 +65,8 @@ export default function JobPost() {
         }
 
         if (state?.edit) {
-            await updateJobPostById(stateData?._id, formData);
+            const userId = localStorage.getItem("userId");
+            await updateJobPostById(stateData?._id, formData, userId);
             navigate("/");
             return;
         }
